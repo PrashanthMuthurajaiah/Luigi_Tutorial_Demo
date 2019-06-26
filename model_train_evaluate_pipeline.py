@@ -83,4 +83,27 @@ This Module/Task is responsible for building model architecture.
 """
 
 class ModelBuilding(luigi.Task):
-    pass
+    data_extract_path_mb = luigi.Parameter()
+
+    def requires(self):
+        return DataPreprocessing(self.data_extract_path_mb)
+
+    def output(self):
+        return luigi.LocalTarget('./Model/modelarch.h5')
+
+    def run(self):
+        numpy_array_data_path = self.input()
+        X_train_saved_path = numpy_array_data_path['X_train_path'].path)
+        X_val_saved_path = numpy_array_data_path['X_val_path'].path)
+        X_test_saved_path = numpy_array_data_path['X_test_path'].path)
+        Y_train_saved_path = numpy_array_data_path['Y_train_path'].path)
+        Y_val_saved_path = numpy_array_data_path['Y_val_path'].path)
+        Y_test_saved_path = numpy_array_data_path['Y_test_path'].path)
+
+        #Loading Numpy arrays
+        X_train_v2 = np.load(X_train_saved_path)
+        X_val_v2 = np.load(X_val_saved_path)
+        X_test_v2 = np.load(X_test_saved_path)
+        Y_train_v2 = np.load(Y_train_saved_path)
+        Y_val_v2 = np.load(Y_val_saved_path)
+        Y_test_v2 = np.load(Y_test_saved_path)
