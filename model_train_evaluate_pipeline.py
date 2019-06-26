@@ -4,6 +4,9 @@ import pandas as pd
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.models import load_model
 
 
 """
@@ -89,16 +92,16 @@ class ModelBuilding(luigi.Task):
         return DataPreprocessing(self.data_extract_path_mb)
 
     def output(self):
-        return luigi.LocalTarget('./Model/modelarch.h5')
+        return luigi.LocalTarget('./Model/house_price_predict.h5')
 
     def run(self):
         numpy_array_data_path = self.input()
-        X_train_saved_path = numpy_array_data_path['X_train_path'].path)
-        X_val_saved_path = numpy_array_data_path['X_val_path'].path)
-        X_test_saved_path = numpy_array_data_path['X_test_path'].path)
-        Y_train_saved_path = numpy_array_data_path['Y_train_path'].path)
-        Y_val_saved_path = numpy_array_data_path['Y_val_path'].path)
-        Y_test_saved_path = numpy_array_data_path['Y_test_path'].path)
+        X_train_saved_path = numpy_array_data_path['X_train_path'].path
+        X_val_saved_path = numpy_array_data_path['X_val_path'].path
+        X_test_saved_path = numpy_array_data_path['X_test_path'].path
+        Y_train_saved_path = numpy_array_data_path['Y_train_path'].path
+        Y_val_saved_path = numpy_array_data_path['Y_val_path'].path
+        Y_test_saved_path = numpy_array_data_path['Y_test_path'].path
 
         #Loading Numpy arrays
         X_train_v2 = np.load(X_train_saved_path)
@@ -107,3 +110,26 @@ class ModelBuilding(luigi.Task):
         Y_train_v2 = np.load(Y_train_saved_path)
         Y_val_v2 = np.load(Y_val_saved_path)
         Y_test_v2 = np.load(Y_test_saved_path)
+
+        # Define the architecture of the model
+        model = Sequential([Dense(32, activation='relu', input_shape=(10,)), Dense(32, activation='relu'),  Dense(1, activation='sigmoid'),])
+        model.compile(optimizer='sgd',loss='binary_crossentropy', metrics=['accuracy'])
+        hist = model.fit(X_train_v2, Y_train_v2,batch_size=32, epochs=100,validation_data=(X_val_v2, Y_val_v2))
+        model.save('./Model/house_price_predict.h5')
+
+# """
+# Module/Tasks which performs the training.
+# """
+#
+# class ModelTraining(luigi.Task):
+#     data_extract_path_mt = luigi.Parameter()
+#
+#     def requires(self):
+#         return ModelBuilding(self.data_extract_path_mt)
+#
+#     def output(self):
+#         return luigi.LocalTarget('./Models/Model_with_weights.h5')
+#
+#     def run(self):
+#         model_path = self.input().path
+#         new_model = load_model(model_path)
