@@ -82,10 +82,10 @@ class DataPreprocessing(luigi.Task):
 
 
 """
-This Module/Task is responsible for building model architecture.
+This Module/Task is responsible for building model architecture, training and evaluation.
 """
 
-class ModelBuilding(luigi.Task):
+class ModelBuildingandEvaluate(luigi.Task):
     data_extract_path_mb = luigi.Parameter()
 
     def requires(self):
@@ -115,6 +115,9 @@ class ModelBuilding(luigi.Task):
         model = Sequential([Dense(32, activation='relu', input_shape=(10,)), Dense(32, activation='relu'),  Dense(1, activation='sigmoid'),])
         model.compile(optimizer='sgd',loss='binary_crossentropy', metrics=['accuracy'])
         hist = model.fit(X_train_v2, Y_train_v2,batch_size=32, epochs=100,validation_data=(X_val_v2, Y_val_v2))
+
+        # Evaluate the model
+        print("Model Accuracy",model.evaluate(X_test_v2,Y_test_v2)[1])
         model.save('./Model/house_price_predict.h5')
 
 # """
