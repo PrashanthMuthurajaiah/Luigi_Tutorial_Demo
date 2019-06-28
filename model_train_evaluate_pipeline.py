@@ -58,7 +58,8 @@ class DataPreprocessing(luigi.Task):
         # Converting the dataframe into an array.
         dataset = base_dataframe.values
         X = dataset[:,0:10]
-        Y = dataset[:,10]
+        Y = dataset[:,11]
+    
 
         min_max_scaler = preprocessing.MinMaxScaler()
         X_scale = min_max_scaler.fit_transform(X)
@@ -69,8 +70,6 @@ class DataPreprocessing(luigi.Task):
         # Usinf train_test_split to create validation data
         X_val, X_test, Y_val, Y_test = train_test_split(X_val_and_test, Y_val_and_test, test_size=0.5)
 
-        # Printing the shape of all the variables
-        print(X_train.shape, X_val.shape, X_test.shape, Y_train.shape, Y_val.shape, Y_test.shape)
 
         # Saving the numpy arrays to their designated location which will be utilized while model creation
         np.save('./X_train.npy', X_train)
