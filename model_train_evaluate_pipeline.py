@@ -59,7 +59,7 @@ class DataPreprocessing(luigi.Task):
         dataset = base_dataframe.values
         X = dataset[:,0:10]
         Y = dataset[:,11]
-    
+
 
         min_max_scaler = preprocessing.MinMaxScaler()
         X_scale = min_max_scaler.fit_transform(X)
@@ -119,19 +119,18 @@ class ModelBuildingandEvaluate(luigi.Task):
         print("Model Accuracy",model.evaluate(X_test_v2,Y_test_v2)[1])
         model.save('./Model/house_price_predict.h5')
 
-# """
-# Module/Tasks which performs the training.
-# """
-#
-# class ModelTraining(luigi.Task):
-#     data_extract_path_mt = luigi.Parameter()
-#
-#     def requires(self):
-#         return ModelBuilding(self.data_extract_path_mt)
-#
-#     def output(self):
-#         return luigi.LocalTarget('./Models/Model_with_weights.h5')
-#
-#     def run(self):
-#         model_path = self.input().path
-#         new_model = load_model(model_path)
+"""
+Module/Task to deploy the model for request processing through Tensowflow Serving.
+"""
+
+class ModelDeploy(luigi.Task):
+    data_extract_path_md = luigi.Parameter()
+
+    def requires(self):
+        pass
+
+    def output(self):
+        pass
+
+    def run(self):
+        pass
