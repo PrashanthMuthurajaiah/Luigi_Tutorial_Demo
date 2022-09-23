@@ -23,7 +23,7 @@ MarkupSafe==1.1.1
 mock==3.0.5
 numpy==1.16.3
 Pillow==2.2.2
-protobuf==3.7.1
+protobuf==3.18.3
 pyrsistent==0.15.2
 pytz==2019.1
 PyYAML==5.1
